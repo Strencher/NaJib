@@ -12,5 +12,13 @@ const NaJib = {
             } else el[i] = options[i];
         }
         return el;
+    },
+    getNestedProp(object, path) {
+        return path.split(".").reduce((object, p) => object && object[p], object)
+    },
+    parseHTML(htmlString) {
+        const dummy = document.createElement("div");
+        dummy.innerHTML = htmlString;
+        return dummy.children.length == 1 ? dummy.children[0] : Array.from(dummy.children)
     }
 }

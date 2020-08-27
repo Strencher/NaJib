@@ -20,5 +20,10 @@ const NaJib = {
         const dummy = document.createElement("div");
         dummy.innerHTML = htmlString;
         return dummy.children.length == 1 ? dummy.children[0] : Array.from(dummy.children)
-    }
+    },
+    formatString(string, options) {
+        for (const key in options)
+            string = string.replace(new RegExp(`{{${key}}}`, 'g'), options[key]);
+        return string;
+    };
 }

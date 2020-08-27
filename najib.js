@@ -25,5 +25,5 @@ const NaJib = {
         for (const key in options)
             string = string.replace(new RegExp(`{{${key}}}`, 'g'), options[key]);
         return string;
-    };
+    }
 }

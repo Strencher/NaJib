@@ -1,4 +1,40 @@
 const NaJib = {
+    nodes: [],
+    Component: class Component {
+        forceUpdate() {
+            var node = this.render();
+            this.current.replaceWith(node);
+            this.current = node;
+        }
+
+        setState(state, callback = () => {}) {
+            if (!this.state) this.state = {};
+            Object.assign(this.state, state);
+            this.forceUpdate();
+            callback();   
+        }
+
+        beforeMount() {return;}
+        afterMount() {return;}
+
+        render() {
+            return null;
+        }
+    },
+    render(component, node) {
+        const el = new component();
+        this.nodes.push({ref: el});
+        try {
+            el.beforeMount();
+            if (node) var ref = node.appendChild(el.render());
+            Object.assign(el, {target: node, current: ref});
+            el.afterMount(el);
+        } catch(error) {
+            console.error(error);
+            return null;
+        }
+        return el;
+    },
     createElement(type, options) {
         const el = document.createElement(type);
         for(const i in options) {

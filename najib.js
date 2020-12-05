@@ -60,17 +60,27 @@ const NaJib = {
         }
         return el;
     },
-    createElement(type, options) {
+    createElement(type, options, children) {
         const el = document.createElement(type);
         for(const i in options) {
             if(i == "style") for(let g in options[i]) el.style.setProperty(g, options[i][g]);
-            else if(i == "children") {
+            else if(i == "children" && !children) {
                 if(options[i] instanceof Array) {
                     for(const f of options[i]) if(f instanceof Element) el.appendChild(f)
                     else el.innerHTML += f;
                 } else if(options[i] instanceof Element) el.appendChild(options[i]); 
                 else el.innerHTML += options[i];
+            } else if (i == "events") for(let listener in options[i]) {
+                el.addEventListener(listener.toLowerCase().slice(2), options[i][listener]);
             } else el[i] = options[i];
+        }
+        if(children) {
+            if (Array.isArray(children)) for(const element of children) {
+                if(typeof element == "string") el.innerHTML += element;
+                else if(element instanceof Element) el.appendChild(element);
+            }
+            else if(typeof children == "string") el.innerHTML += children;
+            else if(children instanceof Element) el.appendChild(children);
         }
         return el;
     },

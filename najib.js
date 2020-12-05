@@ -1,4 +1,4 @@
-const NaJib = {
+window.SLib = {
     injectFakeJQuery() {
         window.$ = e => {
             if (e.trim()[0] == "<") return this.parseHTML(e);
@@ -97,4 +97,5 @@ const NaJib = {
             string = string.replace(new RegExp(`{{${key}}}`, 'g'), options[key]);
         return string;
     }
-}
+};
+window.NaJib = SLib;

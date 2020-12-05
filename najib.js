@@ -1,4 +1,29 @@
 const NaJib = {
+    injectFakeJQuery() {
+        window.$ = e => {
+            if (e.trim()[0] == "<") return this.parseHTML(e);
+            return document.querySelector(e);
+        }
+    },
+    findInTree(tree, filter, {walkable = null, exclude = []} = {}) {
+        if (!tree || typeof tree != "object") return;
+        let returnValue;
+        if (typeof filter == "string") return tree[filter];
+        if (filter(tree)) return tree;
+        if (Array.isArray(tree)) for (const value of tree) {
+            returnValue = this.findInTree(value, filter, {walkable, exclude});
+            if (returnValue) return returnValue;
+        }
+        walkable = walkable || Object.keys(tree);
+        for (const key of walkable) {
+            if (!tree.hasOwnProperty(key) || exclude.includes(key)) continue;
+            returnValue = this.findInTree(tree[key], filter, {
+                walkable,
+                exclude
+            });
+            if (returnValue) return returnValue;
+        }
+    },
     nodes: [],
     Component: class Component {
         forceUpdate() {

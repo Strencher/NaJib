@@ -37,8 +37,11 @@ window.SLib = {
             if (returnValue) return returnValue;
         }
     },
-    nodes: [],
     Component: class Component {
+        constructor(props) {
+            this.props = props;
+        }
+    
         forceUpdate() {
             var node = this.render();
             this.current.replaceWith(node);
@@ -60,20 +63,22 @@ window.SLib = {
         }
     },
     render(component, node) {
-        const el = new component();
-        this.nodes.push({ref: el});
-        try {
-            el.beforeMount();
-            if (node) var ref = node.appendChild(el.render());
-            Object.assign(el, {target: node, current: ref});
-            el.afterMount(el);
-        } catch(error) {
-            console.error(error);
-            return null;
-        }
-        return el;
+        if (!Node.prototype.isPrototypeOf(component) || !Node.prototype.isPrototypeOf(node)) return false;
+        return node.appendChild(node);
     },
     createElement(type, options, children) {
+        if (typeof type == "function") {
+            try {
+                const instance = new type(Object.assign({}, options, {children: typeof children == "undefined" ? options.children : children}));
+                instance.beforeMount();
+                const didRender = instance.render();
+                instance.afterMount(didRender);
+            }
+            catch(error) {
+                console.error("[SLib] Could not create element.", error);
+                return null;
+            }
+        }
         const el = document.createElement(type);
         for(const i in options) {
             if(i == "style") for(let g in options[i]) el.style.setProperty(g, options[i][g]);

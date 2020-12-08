@@ -73,7 +73,7 @@ window.SLib = {
                 instance.beforeMount();
                 const didRender = instance.render();
                 instance.afterMount(didRender);
-                instance.current = didRender();
+                instance.current = didRender;
                 return didRender;
             }
             catch(error) {

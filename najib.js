@@ -73,6 +73,7 @@ window.SLib = {
                 instance.beforeMount();
                 const didRender = instance.render();
                 instance.afterMount(didRender);
+                return didRender;
             }
             catch(error) {
                 console.error("[SLib] Could not create element.", error);

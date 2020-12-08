@@ -64,7 +64,7 @@ window.SLib = {
     },
     render(component, node) {
         if (!Node.prototype.isPrototypeOf(component) || !Node.prototype.isPrototypeOf(node)) return false;
-        return node.appendChild(node);
+        return node.appendChild(component);
     },
     createElement(type, options, children) {
         if (typeof type == "function") {

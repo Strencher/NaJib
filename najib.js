@@ -26,7 +26,7 @@ window.SLib = {
         unpatchAll(caller) {
             const patches = this.getPatchesByCaller(caller);
             if(!patches.length) return;
-            for(const patch of patches) unpatch.unpatch();
+            for(const patch of patches) patch.unpatch();
         }
 
         makeOverride(patch) {
@@ -122,7 +122,7 @@ window.SLib = {
         return node[Object.keys(node).find(e => e.startsWith("__reactInternalInstance"))]
     }, 
     getOwnerInstance(node) {
-        node = getReactInstance(node);
+        node = this.getReactInstance(node);
         if(!node) return null;
         for(let curr = node; curr; curr = curr.return) {
             const owner = curr.stateNode;
